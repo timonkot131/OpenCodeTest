@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/decorateTopView"
+        android:background="@color/navigation_background"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/decorateTopView"
+        android:layout_marginTop="0dp"
+        android:background="@color/light_background_button" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/bigMovieSearchScore"
+                    android:layout_toRightOf="@id/bigMovieSearchStars"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/title"
+                    android:text="4.2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <LinearLayout
+                    android:id="@+id/bigMovieSearchStars"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/bigMovieSearchPoster"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_star_24"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_star_24"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_star_24"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_star_24"/>
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:background="@drawable/ic_baseline_star_24"/>
+                </LinearLayout>
+                <ImageView
+                    android:id="@+id/bigMovieSearchPoster"
+                    android:layout_width="206dp"
+                    android:layout_height="339dp"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_below="@+id/bigMovieSearchPoster"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="25dp"
+                    android:textColor="@color/black"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="FilmName"/>
+            </RelativeLayout>
+            <TextView
+                android:id="@+id/bigMovieSearchGenre"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Текст"/>
+
+            <TextView
+                android:id="@+id/bigMovieSearchDirector"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Текст"/>
+
+            <TextView
+                android:id="@+id/bigMovieSearchActors"
+                android:textColor="@color/black"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Текст"/>
+
+            <TextView
+                android:textColor="@color/black"
+                android:layout_marginTop="20dp"
+                android:id="@+id/bigMovieSearchDuration"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Текст"/>
+
+            <TextView
+                android:textColor="@color/black"
+                android:id="@+id/bigMovieSearchDescription"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Текст"/>
+
+            <Button
+                android:id="@+id/bigMovieSearchAddToFavourites"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                android:paddingHorizontal="20dp"
+                android:textSize="17dp"
+                android:textAllCaps="false"
+                android:text="Добавить в избранные"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_search_shape"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

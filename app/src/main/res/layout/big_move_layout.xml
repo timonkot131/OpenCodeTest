@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/popup_shape">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
+        android:background="@color/navigation_background"
+        android:layout_height="80dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <TextView
+            android:id="@+id/popupMovieTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:text="TestTest"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/popupMovieDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="16dp"
+            android:text="aaa"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/popupMovieStars"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="50dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_baseline_star_24" />\
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_baseline_star_24" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_baseline_star_24" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_baseline_star_24" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_baseline_star_24" />
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/popupMoviePoster"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+
+            <TableLayout
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TableRow>
+                    <TextView
+                        android:textColor="@color/title"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="textEnd"
+                        android:text="Жанр:"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/popUpMovieGenre"
+                        android:layout_width="wrap_content"
+                        android:text="Описание "
+                        android:layout_height="wrap_content"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:textColor="@color/title"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="textEnd"
+                        android:text="Директор:"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/popupMovieDirector"
+                        android:layout_width="wrap_content"
+                        android:text="Описание"
+                        android:layout_height="wrap_content"/>
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:textColor="@color/title"
+                        android:layout_width="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:textAlignment="textEnd"
+                        android:text="Актеры:"
+                        android:layout_height="wrap_content"/>
+                    <TextView
+                        android:id="@+id/popupMovieActors"
+                        android:layout_width="wrap_content"
+                        android:text="Описание"
+                        android:layout_height="wrap_content"/>
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+                android:textAlignment="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="**********************************"/>
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:id="@+id/popupMovieDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/popupMovieCloseButton"
+        android:layout_height="43dp"
+        android:layout_width="1.dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/button_shape"
+        android:text="Закрыть"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.51"
+        app:layout_constraintStart_toEndOf="@+id/popupMovieDeleteButton" />
+
+    <ImageView
+        android:id="@+id/popupMovieDeleteButton"
+        android:layout_width="49dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/garbage_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
