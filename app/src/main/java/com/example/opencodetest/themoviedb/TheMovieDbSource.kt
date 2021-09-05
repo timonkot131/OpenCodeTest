@@ -1,8 +1,6 @@
 package com.example.opencodetest.themoviedb
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.util.Base64
 import com.example.opencodetest.R
 import com.example.opencodetest.movies.networking.DownloadingMovie
@@ -27,15 +25,15 @@ class TheMovieDbSource(context: Context) : MovieSource {
     private fun isSuccessful(code: Int) = code in 200..299
 
     data class SearchResult(
-        val posterPath: String,
+        val posterPath: String?,
         val description: String,
-        val year: Int,
+        val year: Int?,
         val title: String,
         val id: Int,
         val score: Float
     )
 
-    data class MovieDetails(val runtime: Int, val genres: Array<String>)
+    data class MovieDetails(val runtime: Int?, val genres: Array<String>)
 
     data class Credits(val actors: Array<String>, val directors: Array<String>)
 
@@ -50,9 +48,9 @@ class TheMovieDbSource(context: Context) : MovieSource {
                 val obj = results.getJSONObject(it)
                 val id = obj.getInt("id")
                 val title = obj.getString("title")
-                val date = obj.getString("release_date").split("-")[0].toInt()
+                val date = obj.getString("release_date").split("-")[0].toIntOrNull()
                 val description = obj.getString("overview")
-                val poster = obj.getString("poster_path")
+                val poster: String? = obj.getString("poster_path")
                 val score = obj.getDouble("vote_average").toFloat()
                 yield(SearchResult(poster, description, date, title, id, score))
             }
@@ -61,7 +59,7 @@ class TheMovieDbSource(context: Context) : MovieSource {
 
     private fun getDetailsFromString(string: String): MovieDetails {
         val root = JSONObject(string)
-        val runtime = root.getInt("runtime")
+        val runtime = try { root.getInt("runtime") } catch(e: Throwable) { null }
         val genres = root.getJSONArray("genres")
         val genreNames = sequence {
             repeat(genres.length()) {
@@ -96,15 +94,24 @@ class TheMovieDbSource(context: Context) : MovieSource {
         return Credits(actors, directors)
     }
 
-    private fun getImage(imagePath: String): Res<ByteArray, MovieError> =
+    private fun getImage(imagePath: String?): Res<ByteArray?, MovieError> =
         try {
+            if (imagePath == null)
+                // на самом деле это нормально, если представить bytearray, как option тип.
+                // Ошибки нет, но данные пустые. Nullable а котлине, это как Option встроенный в синтаксис
+                ResOk(null)
+            else
             (URL("https://image.tmdb.org/t/p/w500" + imagePath).openConnection() as HttpURLConnection).run {
                 connect()
                 if (isSuccessful(responseCode)) {
                     ResOk(inputStream.readBytes())
                 } else {
-                    throw Throwable(errorStream.toString())
-                    ResError(BadResponse(""))
+                    if (responseCode == 404)
+                        ResOk(null)
+                    else{
+                        throw Throwable(errorStream.bufferedReader().readText())
+                        ResError(BadResponse(""))
+                    }
                 }
             }
         } catch (e: IOException) {
@@ -120,7 +127,7 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getSearchResultsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.toString())
+                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }
@@ -136,7 +143,7 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getCreditsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.toString())
+                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }
@@ -152,7 +159,7 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getDetailsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.toString())
+                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }
@@ -164,11 +171,10 @@ class TheMovieDbSource(context: Context) : MovieSource {
         searchMovie(movie).map { searchResults ->
             searchResults.map { res ->
                 val title = res.title
-
                 val metadata = scope.async(Dispatchers.IO) {
-                    getImage(res.posterPath).bind { bm ->
-                        getMovieCredits(res.id).bind { credits ->
-                            getMovieDetails(res.id).map { details ->
+                    getImage(res.posterPath).bindSus { bm -> //Посмотрит результат и isActive корутина. Если корутин неактивен, прекращает все операции
+                        getMovieCredits(res.id).bindSus { credits ->
+                            getMovieDetails(res.id).mapSus { details ->
                                 MovieMetadata (
                                    res.year,
                                    credits.directors,
@@ -192,10 +198,10 @@ class TheMovieDbSource(context: Context) : MovieSource {
         val title = searchRes.map { it.title }
         val metadata =
             scope.async(Dispatchers.IO) {
-                searchRes.bind { res ->
-                    getImage(res.posterPath).bind { bm ->
-                        getMovieCredits(res.id).bind { credits ->
-                            getMovieDetails(res.id).map { details ->
+                searchRes.bindSus { res ->
+                    getImage(res.posterPath).bindSus { bm ->
+                        getMovieCredits(res.id).bindSus { credits ->
+                            getMovieDetails(res.id).mapSus { details ->
                                 MovieMetadata(
                                     res.year,
                                     credits.directors,

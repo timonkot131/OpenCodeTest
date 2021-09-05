@@ -68,14 +68,16 @@
                     android:layout_width="206dp"
                     android:layout_height="339dp"
                     android:layout_centerHorizontal="true" />
+
                 <TextView
-                    android:layout_below="@+id/bigMovieSearchPoster"
-                    android:layout_centerHorizontal="true"
-                    android:textSize="25dp"
-                    android:textColor="@color/black"
+                    android:id="@+id/bigMovieSearchTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="FilmName"/>
+                    android:layout_below="@+id/bigMovieSearchPoster"
+                    android:layout_centerHorizontal="true"
+                    android:text="FilmName"
+                    android:textColor="@color/black"
+                    android:textSize="25dp" />
             </RelativeLayout>
             <TextView
                 android:id="@+id/bigMovieSearchGenre"

@@ -18,6 +18,7 @@ class MovieSearchViewModel(app: Application): AndroidViewModel(app) {
     private val scope = MainScope()
 
     private var searchingJob: Job? = null
+    private var supervisorJob = SupervisorJob()
 
     val movies: MutableLiveData<List<Movie>> by lazy {
         MutableLiveData<List<Movie>>()
@@ -26,9 +27,13 @@ class MovieSearchViewModel(app: Application): AndroidViewModel(app) {
     private var searchString: String = ""
 
     fun searchMovies(searchString: String) {
+        if (searchString.isBlank() || searchString.isEmpty()){
+            movies.value = listOf()
+            return
+        }
         this.searchString = searchString
         searchingJob?.cancel()
-        searchingJob = scope.launch(Dispatchers.IO){
+        searchingJob = scope.launch(Dispatchers.IO + supervisorJob){
             val result = searchingRepository.searchMovies(searchString).map {
                 val current = reactiveRepository.fetchMovies().map { it.name }
                 it.filter { movie -> !current.contains(movie.name) } }
@@ -42,7 +47,9 @@ class MovieSearchViewModel(app: Application): AndroidViewModel(app) {
     }
 
     fun addMovie(movie: Movie){
-        searchingRepository.addMovie(movie)
-        movies.value = movies.value?.filter{ it.name != movie.name}
+        scope.launch(Dispatchers.IO) {
+            searchingRepository.addMovie(movie)
+            scope.launch(Dispatchers.Main) {  movies.value = movies.value?.filter{ it.name != movie.name}}
+        }
     }
 }

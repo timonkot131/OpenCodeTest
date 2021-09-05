@@ -20,10 +20,13 @@ import kotlinx.android.synthetic.main.small_movie_layout.view.*
 
 class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(context) {
 
-    private val popUpMovieView = PopUpMovieView(context, movie)
+    private val popupWindow = PopupWindow(context)
+    private val popUpMovieView = PopUpMovieView(context, movie, popupWindow)
+
 
     init {
         inflate(context, R.layout.small_movie_layout, this)
+        popupWindow.contentView = popUpMovieView
         smallMovieTitle.text = movie.name
         movie.getMetadata(::onMetadataGet)
     }
@@ -32,20 +35,20 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
         when(metadata){
             is ResOk -> {
                 //popup
-                metadata.value.description.let( popUpMovieView.popupMovieDescription::setText)
-                metadata.value.genres?.let{ popUpMovieView.popUpMovieGenre.text = arrayToCommaString(it) }
-                metadata.value.directors?.let { popUpMovieView.popupMovieDirector.text = arrayToCommaString(it) }
-                metadata.value.actors?.let { popUpMovieView.popupMovieActors.text = arrayToCommaString(it) }
+                metadata.value.description.let( popupWindow.contentView.popupMovieDescription::setText)
+                metadata.value.genres?.let{ popupWindow.contentView.popUpMovieGenre.text = arrayToCommaString(it) }
+                metadata.value.directors?.let { popupWindow.contentView.popupMovieDirector.text = arrayToCommaString(it) }
+                metadata.value.actors?.let { popupWindow.contentView.popupMovieActors.text = arrayToCommaString(it) }
                 metadata.value.score?.let {
                     get5StarsBy10Rating(it, context).forEachIndexed { index, drawable ->
-                        popUpMovieView.popupMovieStars.get(index).background = drawable
+                        popupWindow.contentView.popupMovieStars.get(index).background = drawable
                     }
                 }
                 metadata.value.duration?.let{
-                    popUpMovieView.popupMovieDuration.text = getDurationFromMinutes(it)
+                    popupWindow.contentView.popupMovieDuration.text = getDurationFromMinutes(it)
                 }
                 metadata.value.poster?.let{
-                    popUpMovieView.popupMoviePoster.setImageBitmap(getBitmapFromBytes(it))
+                    popupWindow.contentView.popupMoviePoster.setImageBitmap(getBitmapFromBytes(it))
                 }
 
                 //smallMovie
@@ -58,25 +61,25 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
                         smallMovieDescription.text = year.toString() + " · " + genres
                     }
                 }
-                metadata.value.duration?.let { smallMovieDescription.text = getDurationFromMinutes(it)}
+                metadata.value.duration?.let { smallMovieDuration.text = getDurationFromMinutes(it)}
                 metadata.value.score?.let { score -> smallMovieScore10.text = score.toString()}
             }
             is ResError -> when(metadata.value) {
                 is NotExisting -> {
-                    popUpMovieView.popupMovieDescription.text = "Данных не обнаружено. Пробуем догрузить"
+                    popupWindow.contentView.popupMovieDescription.text = "Данных не обнаружено. Пробуем догрузить"
                     smallMovieDescription.text = "Данных нео бнаружено. Пробуем догрузить"
                 }
                 is ConnectionError -> {
-                    popUpMovieView.popupMovieDescription.text = "При загрузке данных, возникла ошибка с соединением"
+                    popupWindow.contentView.popupMovieDescription.text = "При загрузке данных, возникла ошибка с соединением"
                     smallMovieDescription.text = "При загрузке данных, возникла ошибка с соединением"
                 }
             }
         }
     }
 
-    fun expand(){
-        val popupWindow = PopupWindow(PopUpMovieView(context, movie))
-        popupWindow.showAtLocation(parent as View, Gravity.BOTTOM, 10, 10)
+    fun expand(anchor: View, onRemove: (Movie) -> Unit) {
+        (popupWindow.contentView as PopUpMovieView).onRemove = onRemove
+        popupWindow.showAtLocation(anchor, Gravity.CENTER, 0, 0)
     }
 
 }

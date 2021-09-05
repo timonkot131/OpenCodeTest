@@ -2,30 +2,117 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/startRoot"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/movieGrid"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/startToolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".StartActivity">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navigation_background"
+        android:elevation="4dp" />
+
+    <GridView
+        android:layout_below="@id/startToolbar"
+        android:id="@+id/startMovieGrid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     </GridView>
 
-    <SlidingDrawer
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <com.example.opencodetest.custom_views.MySlidingDrawer
+        android:id="@+id/startAccountSlider"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:rotation="180"
+        app:orientation="0"
+        app:handle="@+id/handle"
+        app:animateOnClick="true"
+        app:content="@+id/content">
+        <ImageView
+            android:id="@id/handle"
+            android:rotation="180"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RelativeLayout
+            android:id="@id/content"
+            android:background="@color/navigation_background"
+            android:rotation="180"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
             <TextView
-                android:layout_width="match_parent"
-                android:text="aaaaah"
-                android:layout_height="match_parent"/>
-        </LinearLayout>
-    </SlidingDrawer>
+                android:id="@+id/accountName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/accountDescription"
+                android:textSize="22dp"
+                android:textColor="@color/title"
+                android:layout_marginBottom="20dp"
+                android:layout_centerInParent="true"
+                android:text="Лазарев Тимофей"
+                />
+
+            <TextView
+                android:id="@+id/accountDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/accountIcon"
+                android:textSize="16dp"
+                android:layout_marginBottom="20dp"
+                android:layout_centerInParent="true"
+                android:text="Мужчина | Родился 07.07.2001"
+                />
+
+            <ImageView
+                android:id="@+id/accountIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/account_icon" />
+
+            <TextView
+                android:id="@+id/accountNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="89047117404"
+                android:layout_below="@id/accountIcon"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:id="@+id/accountEmail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16dp"
+                android:text="timonoid01@gmail.com"
+                android:layout_below="@id/accountNumber"
+                android:layout_marginTop="20dp"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/accountPhoneCall"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@+id/accountEmail"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="100dp"
+                android:src="@drawable/phone_call" />
+
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_below="@id/accountEmail"
+                android:layout_marginRight="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/email_icon" />
+
+        </RelativeLayout>
+
+    </com.example.opencodetest.custom_views.MySlidingDrawer>
 </RelativeLayout>
 

@@ -3,13 +3,16 @@
     android:layout_width="match_parent"
     android:background="@drawable/popup_shape"
     android:paddingRight="3dp"
+    android:paddingTop="20dp"
+    android:layout_marginBottom="20dp"
+    android:paddingBottom="20dp"
     android:layout_height="150dp">
 
     <ImageView
         android:id="@+id/smallMovieSearchPoster"
         android:layout_width="140dp"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"/>
+        android:layout_alignParentLeft="true" />
 
     <TextView
         android:layout_width="wrap_content"
