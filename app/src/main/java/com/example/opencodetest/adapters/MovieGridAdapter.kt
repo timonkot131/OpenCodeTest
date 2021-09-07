@@ -17,11 +17,11 @@ class MovieGridAdapter(
 ) : ListAdapter {
 
 
-    fun setMovies(movies: List<Movie>){
+    fun setMovies(movies: List<Movie>) {
         this.movies = movies.toMutableList()
     }
 
-    fun removeMovie(pos: Int){
+    fun removeMovie(pos: Int) {
         movies.removeAt(pos)
     }
 
@@ -29,7 +29,7 @@ class MovieGridAdapter(
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val smallMovieView = SmallMovieView(context, movies[position], onClose)
-        smallMovieView.setOnClickListener{onClick(position, it as SmallMovieView)}
+        smallMovieView.setOnClickListener { onClick(position, it as SmallMovieView) }
         return smallMovieView
     }
 

@@ -1,8 +1,9 @@
 package com.example.opencodetest.database.entities
 
-import androidx.room.*
+import androidx.room.Embedded
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.opencodetest.movies.MovieMetadata
-import org.jetbrains.annotations.PropertyKey
 
 @Entity
 class DatabaseMovie (

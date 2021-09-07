@@ -1,30 +1,15 @@
 package com.example.opencodetest
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.util.AttributeSet
-import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.SlidingDrawer
-import android.widget.Space
-import android.widget.TextView
 import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.children
 import androidx.core.widget.addTextChangedListener
-import androidx.lifecycle.ViewModel
 import com.example.opencodetest.custom_views.SmallMovieSearchView
-import com.example.opencodetest.custom_views.SmallMovieView
 import com.example.opencodetest.movies.Movie
 import com.example.opencodetest.utility.observe
 import com.example.opencodetest.viewmodels.MovieSearchViewModel
-
-import com.example.opencodetest.viewmodels.StartViewModel
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_movie_search.*
-import kotlinx.android.synthetic.main.movie_search_toolbar.view.*
 
 class MovieSearch : AppCompatActivity() {
 
@@ -78,7 +63,7 @@ class MovieSearch : AppCompatActivity() {
         movieSearchMovieLayout.removeAllViews()
         movieSearchProgressBar.isIndeterminate = false
 
-        for(movie in movies) {
+        for (movie in movies) {
             movieSearchMovieLayout.addView(SmallMovieSearchView(this, movie))
         }
 
@@ -97,7 +82,6 @@ class MovieSearch : AppCompatActivity() {
 
         }
     }
-
 
 
 }

@@ -1,12 +1,9 @@
 package com.example.opencodetest.custom_views
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.widget.ImageView
 import com.example.opencodetest.R
-import kotlinx.coroutines.yield
 
 
 fun arrayToCommaString(strings: Array<String>, take:  Int = 3): String =

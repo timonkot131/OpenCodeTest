@@ -31,7 +31,7 @@ class SearchingMovieRepository(context: Context) {
     ) : Movie
 
     fun addMovie(movie: Movie) {
-        if(movie !is AwaitingMovie) {
+        if (movie !is AwaitingMovie) {
             throw IllegalArgumentException("Don't implement Movie interface. You must put return value of searchMovie method instead.")
         }
         movieDao.addMovie(DatabaseMovie(0, movie.name, movie.downloadedMetadata))

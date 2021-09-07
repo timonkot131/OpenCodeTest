@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="16dp"
-                android:text="89047117404"
+                android:text="+79047117404"
                 android:layout_below="@id/accountIcon"
                 android:layout_marginTop="20dp"
                 android:layout_centerHorizontal="true"/>
@@ -103,6 +103,7 @@
                 android:src="@drawable/phone_call" />
 
             <ImageView
+                android:id="@+id/accountEmailPush"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_below="@id/accountEmail"

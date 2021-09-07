@@ -1,15 +1,17 @@
 package com.example.opencodetest.repositories
 
 import android.content.Context
+import com.example.opencodetest.database.AppDatabase
+import com.example.opencodetest.database.entities.DatabaseMovie
 import com.example.opencodetest.movies.Movie
+import com.example.opencodetest.movies.MovieMetadata
 import com.example.opencodetest.movies.networking.MovieError
 import com.example.opencodetest.movies.networking.MovieSource
-import com.example.opencodetest.themoviedb.TheMovieDbSource
-import com.example.opencodetest.database.*
-import com.example.opencodetest.database.entities.DatabaseMovie
-import com.example.opencodetest.movies.MovieMetadata
 import com.example.opencodetest.movies.networking.NotExisting
-import com.example.opencodetest.utility.*
+import com.example.opencodetest.themoviedb.TheMovieDbSource
+import com.example.opencodetest.utility.Res
+import com.example.opencodetest.utility.ResError
+import com.example.opencodetest.utility.ResOk
 import kotlinx.coroutines.*
 
 class ReactiveMovieRepository(context: Context) {

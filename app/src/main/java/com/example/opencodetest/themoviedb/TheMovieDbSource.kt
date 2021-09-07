@@ -3,7 +3,6 @@ package com.example.opencodetest.themoviedb
 import android.content.Context
 import android.util.Base64
 import com.example.opencodetest.R
-import com.example.opencodetest.movies.networking.DownloadingMovie
 import com.example.opencodetest.movies.MovieMetadata
 import com.example.opencodetest.movies.networking.*
 import com.example.opencodetest.utility.*
@@ -109,7 +108,6 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     if (responseCode == 404)
                         ResOk(null)
                     else{
-                        throw Throwable(errorStream.bufferedReader().readText())
                         ResError(BadResponse(""))
                     }
                 }
@@ -127,7 +125,6 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getSearchResultsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }
@@ -143,7 +140,6 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getCreditsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }
@@ -159,7 +155,6 @@ class TheMovieDbSource(context: Context) : MovieSource {
                     val result = getDetailsFromString(inputStream.bufferedReader().readText())
                     ResOk(result)
                 } else {
-                    throw Throwable(errorStream.bufferedReader().readText())
                     ResError(BadResponse(""))
                 }
             }

@@ -1,14 +1,11 @@
 package com.example.opencodetest
 
 import android.content.Intent
-import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
-import androidx.core.content.edit
-
+import androidx.appcompat.app.AppCompatActivity
 import com.example.opencodetest.adapters.MovieGridAdapter
 import com.example.opencodetest.custom_views.SmallMovieView
 import com.example.opencodetest.database.AppDatabase
@@ -48,7 +45,7 @@ class StartActivity : AppCompatActivity() {
 
 
         val prefs = getPreferences(MODE_PRIVATE)
-        if(!prefs.contains(FIRST_TIME)){
+        if (!prefs.contains(FIRST_TIME)) {
             val db = AppDatabase.getDatabase(this)
             scope.launch(Dispatchers.IO) {
                 db.movieDao().addMovie(DatabaseMovie(0, "A Dog's Journey", null))
@@ -66,9 +63,8 @@ class StartActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        when (item.itemId){
-            R.id.app_bar_search ->
-            {
+        when (item.itemId) {
+            R.id.app_bar_search -> {
                 startActivity(Intent(this, MovieSearch::class.java))
                 true
             }
@@ -100,13 +96,14 @@ class StartActivity : AppCompatActivity() {
             return
 
         this.popupOwner = smallMovie
-        smallMovie.expand(startRoot){
+        smallMovie.expand(startRoot) {
             movieGridAdapter.removeMovie(index)
             popupOwner?.dismissPopup()
             startViewModel.removeMovie(it)
             startMovieGrid.invalidateViews()
         }
     }
+
     override fun onResume() {
         startViewModel.getMovies()
         super.onResume()
@@ -117,7 +114,7 @@ class StartActivity : AppCompatActivity() {
         popupOwner?.dismissPopup()
     }
 
-    companion object{
+    companion object {
         const val FIRST_TIME = "firstTime"
     }
 

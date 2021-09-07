@@ -1,10 +1,6 @@
 package com.example.opencodetest.database.daos
 
-import android.database.sqlite.SQLiteStatement
 import androidx.room.*
-import androidx.sqlite.db.SimpleSQLiteQuery
-import androidx.sqlite.db.SupportSQLiteProgram
-import androidx.sqlite.db.SupportSQLiteQuery
 import com.example.opencodetest.database.entities.DatabaseMovie
 
 @Dao

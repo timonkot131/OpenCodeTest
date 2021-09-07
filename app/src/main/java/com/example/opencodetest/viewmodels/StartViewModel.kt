@@ -22,14 +22,14 @@ class StartViewModel(app: Application) : AndroidViewModel(app) {
         MutableLiveData<List<Movie>>()
     }
 
-    fun getMovies(){
+    fun getMovies() {
         scope.launch(Dispatchers.IO + supervisorJob) {
             val fetchedMovies = reactiveRepository.fetchMovies()
             scope.launch(Dispatchers.Main) { movies.value = fetchedMovies }
         }
     }
 
-    fun removeMovie(movie: Movie){
+    fun removeMovie(movie: Movie) {
         scope.launch(Dispatchers.IO + supervisorJob) {
             reactiveRepository.removeMovie(movie)
             getMovies()

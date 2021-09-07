@@ -1,13 +1,8 @@
 package com.example.opencodetest.custom_views
 
 import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
-import android.preference.Preference
-import android.preference.PreferenceManager
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
@@ -22,7 +17,7 @@ import com.example.opencodetest.utility.ResOk
 import kotlinx.android.synthetic.main.big_search_movie_layout.view.*
 import kotlinx.android.synthetic.main.small_movie_search_layout.view.*
 
-class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(context) {
+class SmallMovieSearchView(context: Context, movie: Movie) : RelativeLayout(context) {
 
     private var popUp = PopupWindow(context)
     private val bigMovieSearch = BigMovieSearchView(context, movie)
@@ -32,7 +27,8 @@ class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(conte
         smallMovieSearchTitle.text = movie.name
         movie.getMetadata(::onMetadataGet)
         popUp.contentView = bigMovieSearch
-        popUp.contentView.bigMovieSearchToolbar.navigationIcon = context.getDrawable(R.drawable.ic_baseline_arrow_back_ios_24)
+        popUp.contentView.bigMovieSearchToolbar.navigationIcon =
+            context.getDrawable(R.drawable.ic_baseline_arrow_back_ios_24)
     }
 
     fun expand(anchor: View, onAdd: (Movie) -> Unit): PopupWindow {
@@ -47,12 +43,12 @@ class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(conte
         return popUp
     }
 
-    fun dismissPopup(){
+    fun dismissPopup() {
         popUp.dismiss()
     }
 
-    private fun onMetadataGet(metadata: Res<MovieMetadata, MovieError>){
-        when(metadata){
+    private fun onMetadataGet(metadata: Res<MovieMetadata, MovieError>) {
+        when (metadata) {
             is ResOk -> {
                 //bigMovieSearch
                 metadata.value.poster?.let {
@@ -85,15 +81,16 @@ class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(conte
                 }
 
                 metadata.value.duration?.let {
-                    popUp.contentView.bigMovieSearchDuration.text = "Длительность: " + getDurationFromMinutes(it)
+                    popUp.contentView.bigMovieSearchDuration.text =
+                        "Длительность: " + getDurationFromMinutes(it)
                 }
 
                 //smallMovieSearch
-                metadata.value.poster?.let{
+                metadata.value.poster?.let {
                     val image = getBitmapFromBytes(it)
                     smallMovieSearchPoster.setImageBitmap(image)
                 }
-                metadata.value.yearOfCreate?.let{
+                metadata.value.yearOfCreate?.let {
                     smallMovieSearchYear.text = it.toString()
 
                 }
