@@ -16,6 +16,7 @@ import androidx.core.view.children
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModel
 import com.example.opencodetest.custom_views.SmallMovieSearchView
+import com.example.opencodetest.custom_views.SmallMovieView
 import com.example.opencodetest.movies.Movie
 import com.example.opencodetest.utility.observe
 import com.example.opencodetest.viewmodels.MovieSearchViewModel
@@ -28,6 +29,7 @@ import kotlinx.android.synthetic.main.movie_search_toolbar.view.*
 class MovieSearch : AppCompatActivity() {
 
     private val movieSearchViewModel: MovieSearchViewModel by viewModels()
+    private var popupOwner: SmallMovieSearchView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +38,14 @@ class MovieSearch : AppCompatActivity() {
         movieSearchViewModel.movies.observe(this, ::onMovieUpdate)
 
         movieSearchSearchingText.addTextChangedListener {
+            movieSearchProgressBar.isIndeterminate = true
             movieSearchViewModel.searchMovies(it.toString())
         }
+
+        movieSearchCancel.setOnClickListener {
+            movieSearchSearchingText.text.clear()
+        }
+
         setSupportActionBar(movieSearchToolbar)
         movieSearchToolbar.setBackgroundColor(resources.getColor(R.color.navigation_background))
         movieSearchToolbar.setNavigationIcon(R.drawable.ic_baseline_arrow_back_ios_24)
@@ -52,8 +60,23 @@ class MovieSearch : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        popupOwner?.dismissPopup()
+    }
+
+    override fun onBackPressed() {
+        if (popupOwner != null) {
+            popupOwner!!.dismissPopup()
+            popupOwner = null
+        } else {
+            finish()
+        }
+    }
+
     private fun onMovieUpdate(movies: List<Movie>) {
         movieSearchMovieLayout.removeAllViews()
+        movieSearchProgressBar.isIndeterminate = false
 
         for(movie in movies) {
             movieSearchMovieLayout.addView(SmallMovieSearchView(this, movie))
@@ -63,9 +86,15 @@ class MovieSearch : AppCompatActivity() {
             movie as SmallMovieSearchView
 
             movie.setOnClickListener {
-                movie.expand (movieSearchViewModel::addMovie)
-            }
                 // при всплытии окна, записывает событие, если пользователь нажмет на кнопку добавить.
+                popupOwner = movie
+                movie.expand(searchRoot) {
+                    movieSearchViewModel.addMovie(it)
+                    popupOwner?.dismissPopup()
+                    popupOwner = null
+                }
+            }
+
         }
     }
 

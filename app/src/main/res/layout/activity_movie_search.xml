@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/searchRoot"
     tools:context=".MovieSearch">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/movieSearchToolbar"
@@ -13,10 +14,19 @@
         android:elevation="4dp"
         />
 
+    <ProgressBar
+        android:id="@+id/movieSearchProgressBar"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/movieSearchToolbar"
+        android:indeterminate="false"
+        android:indeterminateTint="@color/title" />
+
     <RelativeLayout
         android:layout_marginTop="10dp"
         android:layout_marginHorizontal="10dp"
-        android:layout_below="@id/movieSearchToolbar"
+        android:layout_below="@id/movieSearchProgressBar"
         android:id="@+id/searchContainer"
         android:layout_width="match_parent"
         android:layout_height="30dp"
@@ -34,13 +44,13 @@
             android:id="@+id/movieSearchSearchingText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/empty"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
             android:layout_toLeftOf="@id/movieSearchCancel"
             android:layout_toRightOf="@id/searchIcon"
+            android:background="@drawable/empty"
             android:lines="1"
-            android:text="Testtest"
+            android:hint="Поиск фильмов"
             android:textColor="@color/title"
             android:textSize="17dp" />
 
@@ -61,6 +71,7 @@
         android:layout_below="@id/searchContainer"
         >
         <LinearLayout
+            android:paddingTop="10dp"
             android:id="@+id/movieSearchMovieLayout"
             android:layout_width="match_parent"
             android:paddingLeft="20dp"

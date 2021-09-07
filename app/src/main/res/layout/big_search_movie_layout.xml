@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/bigMovieSearchToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/navigation_background"
+        app:title="Кино"
+        android:elevation="4dp" />
 
     <View
         android:id="@+id/decorateTopView"
-        android:background="@color/navigation_background"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="200dp"
+        android:background="@color/navigation_background" />
 
     <View
         android:layout_width="match_parent"
@@ -17,8 +26,8 @@
         android:background="@color/light_background_button" />
 
     <ScrollView
+        android:layout_below="@id/bigMovieSearchToolbar"
         android:layout_width="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,14 +36,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <TextView
                     android:id="@+id/bigMovieSearchScore"
-                    android:layout_toRightOf="@id/bigMovieSearchStars"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="@color/title"
-                    android:text="4.2"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@id/bigMovieSearchStars"
+                    android:textColor="@color/title" />
                 <LinearLayout
                     android:id="@+id/bigMovieSearchStars"
                     android:orientation="vertical"
@@ -45,23 +54,23 @@
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ic_baseline_star_24"/>
+                        android:background="@drawable/ic_baseline_star_border_24"/>
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ic_baseline_star_24"/>
+                        android:background="@drawable/ic_baseline_star_border_24"/>
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ic_baseline_star_24"/>
+                        android:background="@drawable/ic_baseline_star_border_24"/>
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ic_baseline_star_24"/>
+                        android:background="@drawable/ic_baseline_star_border_24"/>
                     <ImageView
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:background="@drawable/ic_baseline_star_24"/>
+                        android:background="@drawable/ic_baseline_star_border_24"/>
                 </LinearLayout>
                 <ImageView
                     android:id="@+id/bigMovieSearchPoster"
@@ -75,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/bigMovieSearchPoster"
                     android:layout_centerHorizontal="true"
-                    android:text="FilmName"
+                    android:text="Фильм"
                     android:textColor="@color/black"
                     android:textSize="25dp" />
             </RelativeLayout>
@@ -85,7 +94,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Текст"/>
+                />
 
             <TextView
                 android:id="@+id/bigMovieSearchDirector"
@@ -93,7 +102,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Текст"/>
+                />
 
             <TextView
                 android:id="@+id/bigMovieSearchActors"
@@ -101,7 +110,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Текст"/>
+                />
 
             <TextView
                 android:textColor="@color/black"
@@ -110,7 +119,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Текст"/>
+                />
 
             <TextView
                 android:textColor="@color/black"
@@ -118,7 +127,15 @@
                 android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Текст"/>
+                />
+
+            <TextView
+                android:textColor="@color/black"
+                android:id="@+id/bigMovieSearchError"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
 
             <Button
                 android:id="@+id/bigMovieSearchAddToFavourites"

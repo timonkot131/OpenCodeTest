@@ -13,13 +13,13 @@
         android:background="@color/navigation_background"
         android:elevation="4dp" />
 
-    <GridView
-        android:layout_below="@id/startToolbar"
-        android:id="@+id/startMovieGrid"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        <GridView
+            android:layout_below="@id/startToolbar"
+            android:id="@+id/startMovieGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-    </GridView>
+        </GridView>
 
     <com.example.opencodetest.custom_views.MySlidingDrawer
         android:id="@+id/startAccountSlider"

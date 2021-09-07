@@ -1,9 +1,14 @@
 package com.example.opencodetest.custom_views
 
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
+import android.preference.Preference
+import android.preference.PreferenceManager
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.PopupWindow
 import android.widget.RelativeLayout
 import androidx.core.view.get
@@ -19,22 +24,31 @@ import kotlinx.android.synthetic.main.small_movie_search_layout.view.*
 
 class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(context) {
 
-    private val popUp = PopupWindow(context)
+    private var popUp = PopupWindow(context)
     private val bigMovieSearch = BigMovieSearchView(context, movie)
-    val params = LayoutParams( LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 
     init {
         inflate(context, R.layout.small_movie_search_layout, this)
         smallMovieSearchTitle.text = movie.name
         movie.getMetadata(::onMetadataGet)
-        bigMovieSearch.layoutParams = params
         popUp.contentView = bigMovieSearch
+        popUp.contentView.bigMovieSearchToolbar.navigationIcon = context.getDrawable(R.drawable.ic_baseline_arrow_back_ios_24)
     }
 
-    fun expand(onAdd: (Movie) -> Unit): PopupWindow {
+    fun expand(anchor: View, onAdd: (Movie) -> Unit): PopupWindow {
         (popUp.contentView as BigMovieSearchView).onAdd = onAdd
-        popUp.showAtLocation(parent as View, Gravity.CENTER, 0, 0)
+        popUp.width = WindowManager.LayoutParams.MATCH_PARENT
+        popUp.height = WindowManager.LayoutParams.MATCH_PARENT
+        popUp.contentView.bigMovieSearchToolbar.setNavigationOnClickListener {
+            dismissPopup()
+        }
+        popUp.showAtLocation(anchor, Gravity.CENTER, 0, 0)
+
         return popUp
+    }
+
+    fun dismissPopup(){
+        popUp.dismiss()
     }
 
     private fun onMetadataGet(metadata: Res<MovieMetadata, MovieError>){
@@ -71,7 +85,7 @@ class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(conte
                 }
 
                 metadata.value.duration?.let {
-                    popUp.contentView.bigMovieSearchDuration.text = "Длительность: " + it
+                    popUp.contentView.bigMovieSearchDuration.text = "Длительность: " + getDurationFromMinutes(it)
                 }
 
                 //smallMovieSearch
@@ -84,10 +98,8 @@ class SmallMovieSearchView(context: Context, movie: Movie): RelativeLayout(conte
 
                 }
             }
-            is ResError -> {
-                smallMovieSearchYear.text = "Не удалось получить данные"
-                popUp.contentView.bigMovieSearchDescription.text = "Не удалось прогрузить остальные данные"
-            }
+            is ResError -> popUp.contentView.bigMovieSearchError.text = "Оффлайн режим"
+
         }
     }
 

@@ -20,20 +20,17 @@ import com.example.opencodetest.utility.ResError
 import com.example.opencodetest.utility.ResOk
 import kotlinx.android.synthetic.main.big_move_layout.view.*
 
-class PopUpMovieView(context: Context, movie: Movie, popUpInstance: PopupWindow, var onRemove: ((Movie) -> Unit)? = null) : ConstraintLayout(context) {
+class PopUpMovieView(context: Context, movie: Movie, var onRemove: ((Movie) -> Unit)? = null) : ConstraintLayout(context) {
 
     init {
         inflate(context, R.layout.big_move_layout, this)
         popupMovieTitle.text = movie.name
-        popupMovieCloseButton.setOnClickListener {
-            popUpInstance.dismiss()
-        }
 
         popupMovieDeleteButton.setOnClickListener {
             it as ImageView
-            onRemove?.invoke(movie)
             it.isActivated = false
             it.isPressed = true
+            onRemove?.invoke(movie)
         }
     }
 

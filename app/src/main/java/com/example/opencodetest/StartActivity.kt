@@ -1,31 +1,32 @@
 package com.example.opencodetest
 
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.PopupWindow
-import android.widget.RelativeLayout
 import androidx.activity.viewModels
+import androidx.core.content.edit
 
 import com.example.opencodetest.adapters.MovieGridAdapter
-import com.example.opencodetest.custom_views.BigMovieSearchView
 import com.example.opencodetest.custom_views.SmallMovieView
+import com.example.opencodetest.database.AppDatabase
+import com.example.opencodetest.database.entities.DatabaseMovie
 import com.example.opencodetest.movies.Movie
 import com.example.opencodetest.utility.observe
 import com.example.opencodetest.viewmodels.StartViewModel
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.small_movie_search_layout.view.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 class StartActivity : AppCompatActivity() {
-    val scope = MainScope()
 
     private val startViewModel: StartViewModel by viewModels()
-
-    private val movieGridAdapter = MovieGridAdapter(this, ::onSmallMovieClick)
+    private val movieGridAdapter = MovieGridAdapter(this, ::onSmallMovieClick, ::onPopupClose)
+    private var popupOwner: SmallMovieView? = null
+    val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +34,6 @@ class StartActivity : AppCompatActivity() {
         startViewModel.movies.observe(this, ::updateMovies)
         startMovieGrid.numColumns = 2
         startMovieGrid.adapter = movieGridAdapter
-
         setSupportActionBar(startToolbar)
         supportActionBar!!.run {
             setDisplayShowTitleEnabled(true)
@@ -46,17 +46,18 @@ class StartActivity : AppCompatActivity() {
             startAccountSlider.animateOpen()
         }
 
-        /*
-        val popUp = PopupWindow(this)
-        val bigMovieSearch = layoutInflater.inflate(R.layout.big_move_layout, null)
-        val params = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.MATCH_PARENT,
-            RelativeLayout.LayoutParams.MATCH_PARENT
-        )
 
-            bigMovieSearch.layoutParams = params
-            popUp.contentView = bigMovieSearch
-        popUp.showAtLocation(startRoot, Gravity.NO_GRAVITY, 0,0)*/
+        val prefs = getPreferences(MODE_PRIVATE)
+        if(!prefs.contains(FIRST_TIME)){
+            val db = AppDatabase.getDatabase(this)
+            scope.launch(Dispatchers.IO) {
+                db.movieDao().addMovie(DatabaseMovie(0, "A Dog's Journey", null))
+                db.movieDao().addMovie(DatabaseMovie(0, "Blade Runner 2049", null))
+                db.movieDao().addMovie(DatabaseMovie(0, "Yes, God, Yes", null))
+                db.movieDao().addMovie(DatabaseMovie(0, "Drive", null))
+            }
+            prefs.edit().putBoolean(FIRST_TIME, true).apply()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -75,16 +76,49 @@ class StartActivity : AppCompatActivity() {
         }
 
 
-    private fun updateMovies(movies: List<Movie>){
+    override fun onBackPressed() {
+        if (popupOwner != null) {
+            popupOwner!!.dismissPopup() // при ребаинде убирает попап с экрана
+            popupOwner = null
+        } else {
+            finish()
+        }
+    }
+
+    private fun onPopupClose() {
+        popupOwner?.dismissPopup()
+        popupOwner = null
+    }
+
+    private fun updateMovies(movies: List<Movie>) {
         movieGridAdapter.setMovies(movies)
+        startMovieGrid.invalidateViews()
     }
 
-    private fun onSmallMovieClick(smallMovie: SmallMovieView) {
-        smallMovie.expand(startRoot, startViewModel::removeMovie)
-    }
+    private fun onSmallMovieClick(index: Int, smallMovie: SmallMovieView) {
+        if (startAccountSlider.isOpened)
+            return
 
+        this.popupOwner = smallMovie
+        smallMovie.expand(startRoot){
+            movieGridAdapter.removeMovie(index)
+            popupOwner?.dismissPopup()
+            startViewModel.removeMovie(it)
+            startMovieGrid.invalidateViews()
+        }
+    }
     override fun onResume() {
-        super.onResume()
         startViewModel.getMovies()
+        super.onResume()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        popupOwner?.dismissPopup()
+    }
+
+    companion object{
+        const val FIRST_TIME = "firstTime"
+    }
+
 }

@@ -26,11 +26,11 @@ class TheMovieDbSource(context: Context) : MovieSource {
 
     data class SearchResult(
         val posterPath: String?,
-        val description: String,
+        val description: String?,
         val year: Int?,
         val title: String,
         val id: Int,
-        val score: Float
+        val score: Float?
     )
 
     data class MovieDetails(val runtime: Int?, val genres: Array<String>)
@@ -48,10 +48,10 @@ class TheMovieDbSource(context: Context) : MovieSource {
                 val obj = results.getJSONObject(it)
                 val id = obj.getInt("id")
                 val title = obj.getString("title")
-                val date = obj.getString("release_date").split("-")[0].toIntOrNull()
-                val description = obj.getString("overview")
+                val date = try {obj.getString("release_date") } catch (e: Throwable){ null }?.split("-")?.get(0)?.toIntOrNull()
+                val description = try { obj.getString("overview") } catch (e: Throwable) { null }
                 val poster: String? = obj.getString("poster_path")
-                val score = obj.getDouble("vote_average").toFloat()
+                val score = try { obj.getDouble("vote_average") } catch (e: Throwable) { null }?.toFloat()
                 yield(SearchResult(poster, description, date, title, id, score))
             }
         }.toList().toTypedArray()
@@ -60,10 +60,10 @@ class TheMovieDbSource(context: Context) : MovieSource {
     private fun getDetailsFromString(string: String): MovieDetails {
         val root = JSONObject(string)
         val runtime = try { root.getInt("runtime") } catch(e: Throwable) { null }
-        val genres = root.getJSONArray("genres")
+        val genres = try { root.getJSONArray("genres") } catch (e: Throwable) { null }
         val genreNames = sequence {
-            repeat(genres.length()) {
-                val obj = genres.getJSONObject(it)
+            repeat(genres?.length() ?:0) {
+                val obj = genres!!.getJSONObject(it)
                 yield(obj.getString("name"))
             }
         }.toList().toTypedArray()

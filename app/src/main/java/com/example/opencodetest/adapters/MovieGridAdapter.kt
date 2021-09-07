@@ -11,19 +11,25 @@ import com.example.opencodetest.movies.Movie
 
 class MovieGridAdapter(
     private val context: Context,
-    private val onClick: (SmallMovieView) -> Unit,
-    private var movies: List<Movie> = listOf()
+    private val onClick: (Int, SmallMovieView) -> Unit,
+    private val onClose: () -> Unit,
+    private var movies: MutableList<Movie> = mutableListOf()
 ) : ListAdapter {
 
+
     fun setMovies(movies: List<Movie>){
-        this.movies = movies
+        this.movies = movies.toMutableList()
+    }
+
+    fun removeMovie(pos: Int){
+        movies.removeAt(pos)
     }
 
     override fun isEmpty(): Boolean = movies.isEmpty()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val smallMovieView = SmallMovieView(context, movies[position])
-        smallMovieView.setOnClickListener{onClick(it as SmallMovieView)}
+        val smallMovieView = SmallMovieView(context, movies[position], onClose)
+        smallMovieView.setOnClickListener{onClick(position, it as SmallMovieView)}
         return smallMovieView
     }
 

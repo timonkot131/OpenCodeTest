@@ -1,6 +1,7 @@
 package com.example.opencodetest.custom_views
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
@@ -22,15 +23,18 @@ fun getDurationFromMinutes(minutes: Int): String{
 
 fun get5StarsBy10Rating(rating: Float, context: Context): Array<Drawable> {
     val star5Rating = rating / 2
-    val starcount =  Math.ceil(star5Rating.toDouble()).toInt()
-    val left = star5Rating - starcount
+    val starcount =  Math.floor(star5Rating.toDouble()).toInt()
+    val left = rating % 2
     var starResult = sequence {
         repeat(starcount) {
             yield(context.getDrawable(R.drawable.ic_baseline_star_24)!!)
         }
     }
+
+    if(starResult.count() == 5) return starResult.toList().toTypedArray()
+
     starResult =
-        if (left > 0.5)
+        if (left >= 0.5)
             starResult + context.getDrawable(R.drawable.ic_baseline_star_half_24)!!
         else
             starResult + context.getDrawable(R.drawable.ic_baseline_star_border_24)!!

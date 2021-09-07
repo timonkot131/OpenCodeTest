@@ -1,10 +1,7 @@
 package com.example.opencodetest.custom_views
 
 import android.content.Context
-import android.view.Gravity
-import android.view.View
-import android.view.ViewManager
-import android.view.WindowManager
+import android.view.*
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
@@ -19,12 +16,14 @@ import com.example.opencodetest.utility.ResError
 import com.example.opencodetest.utility.ResOk
 import kotlinx.android.synthetic.main.big_move_layout.view.*
 import kotlinx.android.synthetic.main.small_movie_layout.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
-class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(context) {
+class SmallMovieView(context: Context, val movie: Movie, onClose: () -> Unit) : ConstraintLayout(context) {
 
-    private val popupWindow = PopupWindow(context)
-    private val popUpMovieView = PopUpMovieView(context, movie, popupWindow)
-
+    private var popupWindow = PopupWindow(context)
+    private val popUpMovieView = PopUpMovieView(context, movie)
 
     init {
         popupWindow.setBackgroundDrawable(context.getDrawable(R.drawable.empty))
@@ -32,6 +31,8 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
         popupWindow.contentView = popUpMovieView
         smallMovieTitle.text = movie.name
         movie.getMetadata(::onMetadataGet)
+        popupWindow.contentView.popupMovieCloseButton.setOnClickListener { onClose() }
+        popupWindow.contentView.popupMovieBackground.setOnClickListener { onClose() }
     }
 
     private fun onMetadataGet(metadata: Res<MovieMetadata, MovieError>){
@@ -68,22 +69,22 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
                 metadata.value.score?.let { score -> smallMovieScore10.text = score.toString()}
             }
             is ResError -> when(metadata.value) {
-                is NotExisting -> {
-                    popupWindow.contentView.popupMovieDescription.text = "Данных не обнаружено. Пробуем догрузить"
-                    smallMovieDescription.text = "Данных нео бнаружено. Пробуем догрузить"
-                }
-                is ConnectionError -> {
-                    popupWindow.contentView.popupMovieDescription.text = "При загрузке данных, возникла ошибка с соединением"
-                    smallMovieDescription.text = "При загрузке данных, возникла ошибка с соединением"
-                }
+                is ConnectionError -> popupWindow.contentView.popupMovieError.text = "Оффлайн версия"
             }
         }
     }
 
-    fun expand(anchor: View, onRemove: (Movie) -> Unit) {
+    fun expand(anchor: View, onRemove: (Movie) -> Unit): PopupWindow {
         (popupWindow.contentView as PopUpMovieView).onRemove = onRemove
-        popupWindow.width = anchor.width
+        popupWindow.width = WindowManager.LayoutParams.MATCH_PARENT
+        popupWindow.height = WindowManager.LayoutParams.MATCH_PARENT
+
         popupWindow.showAtLocation(anchor, Gravity.CENTER, 0, 0)
+        return popupWindow
+    }
+
+    fun dismissPopup(){
+        popupWindow.dismiss()
     }
 
 }
