@@ -27,12 +27,12 @@ class MovieSearchViewModel(app: Application): AndroidViewModel(app) {
     private var searchString: String = ""
 
     fun searchMovies(searchString: String) {
+        searchingJob?.cancel()
+        this.searchString = searchString
         if (searchString.isBlank() || searchString.isEmpty()){
             movies.value = listOf()
             return
         }
-        this.searchString = searchString
-        searchingJob?.cancel()
         searchingJob = scope.launch(Dispatchers.IO + supervisorJob){
             val result = searchingRepository.searchMovies(searchString).map {
                 val current = reactiveRepository.fetchMovies().map { it.name }

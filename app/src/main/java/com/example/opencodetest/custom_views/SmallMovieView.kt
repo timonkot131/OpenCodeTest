@@ -3,6 +3,8 @@ package com.example.opencodetest.custom_views
 import android.content.Context
 import android.view.Gravity
 import android.view.View
+import android.view.ViewManager
+import android.view.WindowManager
 import android.widget.PopupWindow
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
@@ -25,6 +27,7 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
 
 
     init {
+        popupWindow.setBackgroundDrawable(context.getDrawable(R.drawable.empty))
         inflate(context, R.layout.small_movie_layout, this)
         popupWindow.contentView = popUpMovieView
         smallMovieTitle.text = movie.name
@@ -79,6 +82,7 @@ class SmallMovieView(context: Context, val movie: Movie) : ConstraintLayout(cont
 
     fun expand(anchor: View, onRemove: (Movie) -> Unit) {
         (popupWindow.contentView as PopUpMovieView).onRemove = onRemove
+        popupWindow.width = anchor.width
         popupWindow.showAtLocation(anchor, Gravity.CENTER, 0, 0)
     }
 
